@@ -1,0 +1,19 @@
+{
+    "Cairo": "القاهرة",
+    "Riyadh": "الرياض",
+    "Kuwait": "الكويت",
+    "Tunis": "تونس",
+    "Abu Dhabi": "ابو ظبي",
+    "min": "الصغرى",
+    "max": "الكبري",
+    "clear sky": "سماء صافية",
+    "few clouds": "قليل الغيوم",
+    "scattered clouds": "غيوم متفرقة",
+    "broken clouds": "غيوم متقطعة",
+    "shower rain": "مطر قلقل",
+    "rain": "مطر",
+    "thunderstorm": "عاصفة رعدية",
+    "snow": "ثلج",
+    "mist": "شَبُّورَة",
+    "Select a Location": "اختار موقعا"
+  }

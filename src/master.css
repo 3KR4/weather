@@ -1,0 +1,239 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+@font-face {
+	font-family: IBM;
+	src: url("/public/fonts/IBM/IBMPlexSansArabic-Light.ttf");
+	font-weight: 400;
+}
+@font-face {
+	font-family: IBM;
+	src: url("/public/fonts/IBM/IBMPlexSansArabic-Regular.ttf");
+	weight: 500;
+}
+@font-face {
+	font-family: IBM;
+	src: url("/public/fonts/IBM/IBMPlexSansArabic-Medium.ttf");
+	font-weight: 600;
+}
+@font-face {
+	font-family: IBM;
+	src: url("/public/fonts/IBM/IBMPlexSansArabic-SemiBold.ttf");
+	font-weight: 700;
+}
+@font-face {
+	font-family: IBM;
+	src: url("/public/fonts/IBM/IBMPlexSansArabic-Bold.ttf");
+	font-weight: 900;
+}
+
+body {
+  font-family: IBM;
+}
+h1,h2,h3,h4,h5,h6 {
+  color: #fff1f1;
+}
+
+
+/*!SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+
+.content {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.content .card {
+  width: fit-content;
+  padding: 10px 45px;
+  border-radius: 45px;
+  background: linear-gradient(147deg, rgba(230, 94, 232, 1) 32%, rgba(82, 98, 242, 1) 96%);
+}
+.content .card > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.content .card .top {
+  gap: 60px;
+  
+}
+.content .card .top .image {
+  position: relative;
+  width: 370px;
+}
+.content .card .top img {
+  position: absolute;
+  left: 0;
+}
+.content .card .top img.sun{
+  width: 250px;
+  top: -218px;
+  left: 130px;
+}
+.content .card .top img.cloud{
+  width: 360px;
+  top: -140px;
+}
+.content .card .top .drop{
+  width: 36px;
+  height: 36px;
+  color: #12a0ed;
+  position: absolute;
+  box-shadow: 0px 39px 34px -5px rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+}
+.content .card .top .drop1{
+  top: 65px;
+  left: 21%;
+  
+}
+.content .card .top .drop2{
+  top: 95px;
+  left: 38%;
+}
+.content .card .top .drop3{
+  top: 78px;
+  left: 56%;
+}
+.content .card .top .time {
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transform: translate(-25px, -15px);
+}
+.content .card .top h1 {
+  font-size: 195px;
+  font-weight: 700;
+  display: flex;
+  margin: 0;
+  margin-bottom: -92px;
+}
+.content .card .top h1 img {
+  position: absolute;
+  right: -49px !important;
+  left: auto;
+  width: 60px;
+  top: 70px;
+}
+.content .card .bottom {
+  flex-direction: row-reverse;
+  height: 150px;
+}
+.content .card .bottom > h1 {
+  font-size: 65px;
+}
+.content .card .bottom .info h1 {
+  font-weight: 800;
+  margin-bottom: -17px;
+}
+button {
+  color: white;
+  width: fit-content;
+  padding: 15px 22px;
+  border-radius: 6px;
+  font-size: 15px;
+  transition: 0.3s;
+  font-weight: 600;
+  border: none;
+  margin-top: 20px;
+  background: linear-gradient(147deg, rgba(230, 94, 232, 1) 23%, rgba(82, 98, 242, 1) 137%);
+}
+.select {
+  width: fit-content;
+  transform: translateY(15px);
+}
+#select-label {
+  color: white;
+  font-weight: 700;
+  font-size: 17px;
+}
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  color: white !important;
+  width: 82% !important;
+  text-align: left;
+  padding: 25px 22px !important;
+  font-size: 50px !important;
+  font-weight: 600 !important;
+  text-transform: capitalize !important;
+  min-height: auto !important;
+}
+.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  border-color: transparent !important;
+}
+.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon,
+.css-bpeome-MuiSvgIcon-root-MuiSelect-icon {
+  color: #fff1f1 !important;
+  top: 36% !important;
+  right: -10px !important;
+  width: 30px !important;
+  height: 30px !important;
+}
+.css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
+  transform: translateX(20px) !important;
+}
+
+@media (max-width:992px) {
+  .content .card .top .image {
+    width: 290px;
+  }
+  .content .card .top img.cloud {
+    width: 300px;
+    top: -107px;
+  }
+  .content .card .top img.sun {
+    width: 190px;
+    top: -157px;
+    left: 98px;
+  }
+  .content .card .top .drop {
+    width: 30px;
+    height: 30px; 
+  }
+}
+@media (max-width:768px) {
+  .content .card .top .image {
+    display: none;
+  }
+  .content .card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .content .card .bottom {
+    flex-direction: column;
+    height: auto;
+    margin: -35px 0 25px;
+  }
+  .content .card .top .time {
+    transform: translate(0, -15px);
+  }
+}
