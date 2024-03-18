@@ -175,9 +175,11 @@ button {
   font-weight: 700 !important;
   font-size: 17px !important;
 }
-.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding-right: 25px !important;
+}
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.MuiSelect-select {
   color: white !important;
-  width: 82% !important;
   text-align: left;
   padding: 25px 22px !important;
   font-size: 50px !important;
@@ -199,7 +201,6 @@ button {
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   transform: translateX(20px) !important;
 }
-
 @media (max-width:992px) {
   .content .card .top .image {
     width: 290px;
