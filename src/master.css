@@ -167,8 +167,8 @@ button {
   background: linear-gradient(147deg, rgba(230, 94, 232, 1) 23%, rgba(82, 98, 242, 1) 137%);
 }
 .select {
-  width: fit-content;
-  transform: translateY(15px);
+  width: fit-content !important;
+  transform: translateY(15px) !important;
 }
 #select-label {
   color: white !important;
