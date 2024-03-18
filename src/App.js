@@ -174,7 +174,6 @@ function App() {
                     <MenuItem value="Kuwait">{t("Kuwait")}</MenuItem>
                     <MenuItem value="Tunis ">{t("Tunis")}</MenuItem>
                     <MenuItem value="Abu Dhabi">{t("Abu Dhabi")}</MenuItem>
-
                   </Select>
                 </FormControl>
               </div>

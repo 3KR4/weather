@@ -171,9 +171,9 @@ button {
   transform: translateY(15px);
 }
 #select-label {
-  color: white;
-  font-weight: 700;
-  font-size: 17px;
+  color: white !important;
+  font-weight: 700 !important;
+  font-size: 17px !important;
 }
 .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   color: white !important;
