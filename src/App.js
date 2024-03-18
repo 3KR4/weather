@@ -163,7 +163,16 @@ function App() {
                 </div>
                 <FormControl className='select' style={{ width: selectedValue.length > 6  && language === "en" ? '290px' : 'fit-content' }}>
                   <InputLabel id="select-label" style={{ right: language === "en" ? 'auto' : 0, left: language === "en" ? 0 : 'auto' }}>{t("Select a Location")}</InputLabel>
-                    <Select
+                    <Select  
+                      style={{
+                        color: 'white',
+                        textAlign: 'left',
+                        padding: '25px 22px',
+                        fontSize: '50px',
+                        fontWeight: 600,
+                        textTransform: 'capitalize',
+                        minHeight: 'auto'
+                      }}
                       labelId="select-label"
                       id="demo-simple-select"
                       value={selectedValue}
