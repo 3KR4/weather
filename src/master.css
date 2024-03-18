@@ -223,8 +223,7 @@ fieldset {
 .MuiInputBase-root {
   padding: 0 !important;
 }
-.css-hfutr2-MuiSvgIcon-root-MuiSelect-icon,
-.css-bpeome-MuiSvgIcon-root-MuiSelect-icon {
+.select svg {
   color: #fff1f1 !important;
   top: 28% !important;
   right: -10px !important;
