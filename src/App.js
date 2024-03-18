@@ -164,6 +164,26 @@ function App() {
                 <FormControl className='select' style={{ width: selectedValue.length > 6  && language === "en" ? '290px' : 'fit-content' }}>
                   <InputLabel id="select-label" style={{ right: language === "en" ? 'auto' : 0, left: language === "en" ? 0 : 'auto' }}>{t("Select a Location")}</InputLabel>
                     <Select  
+                    sx={{
+                      color: "white",
+                      '.MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'transparent !important',
+                      },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+
+                      },
+                      '&.MuiInputBase-root': {
+                        padding: '0 !important',
+                      },
+                      '.MuiSvgIcon-root ': {
+                        color: '#fff1f1 !important',
+                        height: '30px !important',
+                        right:' -10px !important',
+                        top: '30% !important',
+                        width: '30px !important',
+                      }
+                    }}
+    
                       style={{
                         color: 'white',
                         textAlign: 'left',

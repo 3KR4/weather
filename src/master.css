@@ -209,26 +209,13 @@ button {
   transform: translateY(22px) !important;
 }
 #select-label {
-  color: white !important;
+  color: #fff !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
-  font-size: 17px !important;
 }
 .css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
   padding-right: 20px !important;
   padding-top: 3px;
-}
-fieldset {
-  border-color: transparent !important;
-}
-.MuiInputBase-root {
-  padding: 0 !important;
-}
-.select svg {
-  color: #fff1f1 !important;
-  top: 28% !important;
-  right: -10px !important;
-  width: 30px !important;
-  height: 30px !important;
 }
 .css-3dzjca-MuiPaper-root-MuiPopover-paper-MuiMenu-paper {
   transform: translateX(20px) !important;
