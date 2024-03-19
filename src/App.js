@@ -173,10 +173,13 @@ function App() {
 
                       },
                       '&.MuiSelect-outlined': {
-                        borderTop: '0px !important'
+                        borderTop: '0px !important',
                       },
                       '&.MuiInputBase-root': {
-                        padding: '0 !important',
+                        padding: '0px 0px 0 0 !important',
+                      },
+                      '&.MuiInputBase-root div': {
+                        padding: '4px 22px 0 22px !important',
                       },
                       '&#demo-simple-select': {
                         padding: '5px 22px 10px 0 !important',
@@ -185,7 +188,7 @@ function App() {
                         color: '#fff1f1 !important',
                         height: '30px !important',
                         right:' -10px !important',
-                        top: '30% !important',
+                        top: '38% !important',
                         width: '30px !important',
                       }
                     }}
