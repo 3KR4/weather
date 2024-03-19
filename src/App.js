@@ -167,20 +167,23 @@ function App() {
                     sx={{
                       color: "white",
                       '.MuiOutlinedInput-notchedOutline': {
-                        borderColor: 'transparent !important',
+                        borderColor: 'transparent',
                       },
                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
 
                       },
-                      '&.MuiInputBase-root': {
-                        padding: '0 !important',
+                      '&.MuiSelect-outlined': {
+                        borderTop: '0px'
                       },
-                      '.MuiSvgIcon-root ': {
-                        color: '#fff1f1 !important',
-                        height: '30px !important',
-                        right:' -10px !important',
-                        top: '30% !important',
-                        width: '30px !important',
+                      '&.MuiInputBase-root': {
+                        padding: '0',
+                      },
+                      '.MuiSvgIcon-root': {
+                        color: '#fff1f1',
+                        height: '30px',
+                        right:' -10px',
+                        top: '30%',
+                        width: '30px',
                       }
                     }}
     
