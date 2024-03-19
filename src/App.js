@@ -2,7 +2,7 @@ import './master.css';
 import Sun from './img/sun.png';
 import CloudIco from './img/cloud.png';
 import Drop from './img/waterFrop.png';
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Import useState and useEffect
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import moment from 'moment';
@@ -25,9 +25,10 @@ moment.locale("en");
 
 function App() {
   const { t, i18n } = useTranslation();
-  const [selectedValue, setSelectedValue] = useState('cairo');
+  const [selectedValue, setSelectedValue] = useState('Egypt');
   const [language, setLanguage] = useState("en")
 	const direction = language == "ar" ? "rtl" : "ltr"
+  const [countries, setCountries] = useState([]);
 
   const [temp, setTemp] = useState({
     number: null,
@@ -37,12 +38,20 @@ function App() {
     icon: null,
   });
 
-	useEffect(() => {
-		const interval = setInterval(() => {
-			moment().format('dddd, Do MMMM')
-		}, 1000);
-		return () => clearInterval(interval)
-	}, []);
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await axios.get('https://restcountries.com/v3.1/all');
+        const countryNames = response.data.map(country => country.name.common);
+        setCountries(countryNames);
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+        alert('Error fetching countries');
+      }
+    };
+    fetchCountries();
+  }, []); // Fetch country names on component mount
+
 
 	useEffect(()=>{
 		i18n.changeLanguage(language)
@@ -65,7 +74,8 @@ function App() {
         })
       });
 
-      const { results } = response.data;
+      const  results  = response.data.results;
+      console.log(results);
       if (results.length > 0) {
         const lat = results[0].geometry.lat;
         const lon = results[0].geometry.lng;
@@ -95,8 +105,6 @@ function App() {
     }
     moment().format("MMMM Do YYYY, h:mm:ss a");
   }
-
-
 
   const fetchWeatherData = async (lat, lon) => {
     try {
@@ -184,6 +192,10 @@ function App() {
                       '&#demo-simple-select': {
                         padding: '5px 22px 10px 0 !important',
                       },
+                      '&.MuiButtonBase-root': {
+                        maxHeight: 'calc(100% - 32px) !important',
+                        background: 'red !important'
+                      },
                       '.MuiSvgIcon-root ': {
                         color: '#fff1f1 !important',
                         height: '30px !important',
@@ -207,11 +219,11 @@ function App() {
                       value={selectedValue}
                       onChange={handleChange}
                     >
-                    <MenuItem value="cairo">{t("Cairo")}</MenuItem>
-                    <MenuItem value="riyadh">{t("Riyadh")}</MenuItem>
-                    <MenuItem value="Kuwait">{t("Kuwait")}</MenuItem>
-                    <MenuItem value="Tunis ">{t("Tunis")}</MenuItem>
-                    <MenuItem value="Abu Dhabi">{t("Abu Dhabi")}</MenuItem>
+                    {countries.map(country => (
+                      <MenuItem key={country} value={country}>
+                        {country}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </div>
@@ -226,3 +238,4 @@ function App() {
 }
 
 export default App;
+
