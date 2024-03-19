@@ -178,6 +178,9 @@ function App() {
                       '&.MuiInputBase-root': {
                         padding: '0 !important',
                       },
+                      '&#demo-simple-select': {
+                        padding: '5px 22px 10px 0 !important',
+                      },
                       '.MuiSvgIcon-root ': {
                         color: '#fff1f1 !important',
                         height: '30px !important',
