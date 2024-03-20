@@ -159,7 +159,7 @@ function App() {
                 </div>
 
                 <div className='time'>
-                  <h1>{temp.number} <img src={temp.icon} /></h1>
+                  <h1>{temp.number < 10 ? `0${temp.number}`: temp.number} <img src={temp.icon} /></h1>
                   <h2 style={{ minWidth: language === "ar" ? '240px' : 'auto'}}>{t("min")}: {temp.min} | {t("max")}: {temp.max}</h2>
                 </div>
               </div>
