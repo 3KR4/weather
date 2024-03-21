@@ -25,9 +25,9 @@ moment.locale("en");
 
 function App() {
   const { t, i18n } = useTranslation();
-  const [selectedValue, setSelectedValue] = useState('Egypt');
+  const [selectedValue, setSelectedValue] = useState(localStorage.getItem('lastSelectedCountry') || 'Egypt'); // Retrieve the last selected country from local storage
   const [language, setLanguage] = useState("en")
-	const direction = language == "ar" ? "rtl" : "ltr"
+  const direction = language === "ar" ? "rtl" : "ltr"
   const [countries, setCountries] = useState([]);
 
   const [temp, setTemp] = useState({
@@ -39,58 +39,80 @@ function App() {
   });
 
   useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get('https://restcountries.com/v3.1/all');
+    axios.get('https://restcountries.com/v3.1/all')
+      .then(response => {
         const countryNames = response.data.map(country => country.name.common);
         setCountries(countryNames);
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Error fetching countries:', error);
         alert('Error fetching countries');
+      });
+  }, []);
+
+  useEffect(() => {
+    // Fetch initial weather data for default location (Cairo)
+    const storedData = localStorage.getItem("coordinates");
+    let defaultLat = 30.033333;
+    let defaultLon = 31.233334;
+    let defaultCountry = "Egypt";
+
+    if (storedData) {
+      const { lat, lon, country } = JSON.parse(storedData);
+      fetchWeatherData(lat, lon);
+      setSelectedValue(country);
+    } else {
+      fetchWeatherData(defaultLat, defaultLon);
+      localStorage.setItem("coordinates", JSON.stringify({ lat: defaultLat, lon: defaultLon, country: defaultCountry }));
+    }
+
+    return () => {
+      // Cleanup function to cancel the request when the component unmounts
+      if (cancelAxios) {
+        cancelAxios();
       }
     };
-    fetchCountries();
-  }, []); // Fetch country names on component mount
+  }, []);
 
+  useEffect(() => {
+    localStorage.setItem('lastSelectedCountry', selectedValue); // Save the last selected country to local storage
+  }, [selectedValue]);
 
-	useEffect(()=>{
-		i18n.changeLanguage(language)
-	}, [])
-
-  const handleChange = async (event) => {
+  const handleChange = (event) => {
     setSelectedValue(event.target.value);
-    try {
-      if (cancelAxios) {
-        cancelAxios(); // Cancel the previous request if it exists
-      }
-
-      const response = await axios.get('https://api.opencagedata.com/geocode/v1/json', {
-        params: {
-          q: event.target.value,
-          key: 'cf07c0a198774c8da2d00f308cf79dfb' // Replace 'YOUR_API_KEY' with your actual API key
-        },
-        cancelToken: new axios.CancelToken((c) => {
-          cancelAxios = c; // Store the cancel function for the current request
-        })
-      });
-
-      const  results  = response.data.results;
+    if (cancelAxios) {
+      cancelAxios();
+    }
+  
+    axios.get('https://api.opencagedata.com/geocode/v1/json', {
+      params: {
+        q: event.target.value,
+        key: 'cf07c0a198774c8da2d00f308cf79dfb' // Replace 'YOUR_API_KEY' with your actual API key
+      },
+      cancelToken: new axios.CancelToken((c) => {
+        cancelAxios = c; // Store the cancel function for the current request
+      })
+    })
+    .then(response => {
+      const results = response.data.results;
       console.log(results);
       if (results.length > 0) {
         const lat = results[0].geometry.lat;
         const lon = results[0].geometry.lng;
         fetchWeatherData(lat, lon);
+        localStorage.setItem("coordinates", JSON.stringify({ lat, lon, country: event.target.value }));
       } else {
         alert('Location not found');
       }
-    } catch (error) {
+    })
+    .catch(error => {
       if (axios.isCancel(error)) {
         console.log('Request canceled:', error.message);
       } else {
         console.error('Error fetching data:', error);
         alert('Error fetching data');
       }
-    }
+    });
   };
 
   function handleLanguageClick(){
@@ -106,39 +128,29 @@ function App() {
     moment().format("MMMM Do YYYY, h:mm:ss a");
   }
 
-  const fetchWeatherData = async (lat, lon) => {
-    try {
-      const response = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=affeeb15585829dda0d9dc5ad82a7ce6`);
-      const responseTemp = Math.round(response.data.main.temp - 272.15);
-      const min = Math.round(response.data.main.temp_min - 272.15);
-      const max = Math.round(response.data.main.temp_max - 272.15);
-      const description = response.data.weather[0].description;
-      const responseIcon = response.data.weather[0].icon;
-
-      setTemp({
-        number: responseTemp,
-        description: description,
-        min: min,
-        max: max,
-        icon: `https://openweathermap.org/img/wn/${responseIcon}@2x.png`,
+  const fetchWeatherData = (lat, lon) => {
+    axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=affeeb15585829dda0d9dc5ad82a7ce6`)
+      .then(response => {
+        const responseTemp = Math.round(response.data.main.temp - 272.15);
+        const min = Math.round(response.data.main.temp_min - 272.15);
+        const max = Math.round(response.data.main.temp_max - 272.15);
+        const description = response.data.weather[0].description;
+        const responseIcon = response.data.weather[0].icon;
+  
+        setTemp({
+          number: responseTemp,
+          description: description,
+          min: min,
+          max: max,
+          icon: `https://openweathermap.org/img/wn/${responseIcon}@2x.png`,
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data:', error);
+        alert('Error fetching data');
       });
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      alert('Error fetching data');
-    }
   };
-
-  useEffect(() => {
-    // Fetch initial weather data for default location (Cairo)
-    fetchWeatherData(30.033333, 31.233334);
-
-    return () => {
-      // Cleanup function to cancel the request when the component unmounts
-      if (cancelAxios) {
-        cancelAxios();
-      }
-    };
-  }, []);
+  
 
   const day = moment().format('dddd, Do MMMM')
 
