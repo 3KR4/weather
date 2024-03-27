@@ -1,17 +1,23 @@
 import './master.css';
+import { useState, useEffect } from 'react';
+import axios from "axios";
+import { useTranslation } from 'react-i18next';
+//ICONS
 import Sun from './img/sun.png';
 import CloudIco from './img/cloud.png';
-import Drop from './img/waterFrop.png';
-import { useState, useEffect } from 'react'; // Import useState and useEffect
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from "axios";
-import moment from 'moment';
-import "moment/min/locales";
-import Container from '@mui/material/Container';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDroplet } from '@fortawesome/free-solid-svg-icons';
+//MUI
+import Container from '@mui/material/Container';
+import CircularProgress from '@mui/material/CircularProgress';
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { useTranslation } from 'react-i18next';
+//TIME
+import moment from 'moment';
+import "moment/min/locales";
+//REDUX
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchWeather } from './weatherApiSlice';
 
 
 const theme = createTheme({
@@ -24,20 +30,21 @@ let cancelAxios = null;
 moment.locale("en");
 
 function App() {
+  const dispatch = useDispatch()
+  const isLoading = useSelector((state) => {
+    return state.weatherApi.isLoading
+  })
+  const temp = useSelector((state) => {
+    return state.weatherApi.weather
+  })
+
   const { t, i18n } = useTranslation();
-  const [selectedValue, setSelectedValue] = useState(localStorage.getItem('lastSelectedCountry') || 'Egypt'); // Retrieve the last selected country from local storage
+  const [selectedValue, setSelectedValue] = useState(localStorage.getItem('lastSelectedCountry') || 'Egypt');
   const [language, setLanguage] = useState("en")
   const direction = language === "ar" ? "rtl" : "ltr"
   const [countries, setCountries] = useState([]);
 
-  const [temp, setTemp] = useState({
-    number: null,
-    description: "",
-    min: null,
-    max: null,
-    icon: null,
-  });
-
+  //! Countres Name
   useEffect(() => {
     axios.get('https://restcountries.com/v3.1/all')
       .then(response => {
@@ -51,7 +58,6 @@ function App() {
   }, []);
 
   useEffect(() => {
-    // Fetch initial weather data for default location (Cairo)
     const storedData = localStorage.getItem("coordinates");
     let defaultLat = 30.033333;
     let defaultLon = 31.233334;
@@ -59,34 +65,41 @@ function App() {
 
     if (storedData) {
       const { lat, lon, country } = JSON.parse(storedData);
-      fetchWeatherData(lat, lon);
-      setSelectedValue(country);
+      dispatch(fetchWeather({ lat, lon }));
     } else {
-      fetchWeatherData(defaultLat, defaultLon);
-      localStorage.setItem("coordinates", JSON.stringify({ lat: defaultLat, lon: defaultLon, country: defaultCountry }));
+      axios.get(`https://api.opencagedata.com/geocode/v1/json?q=${selectedValue}&key=cf07c0a198774c8da2d00f308cf79dfb`)
+        .then(response => {
+          const results = response.data.results;
+          if (results.length > 0) {
+            const lat = results[0].geometry.lat;
+            const lon = results[0].geometry.lng;
+            dispatch(fetchWeather({ lat, lon }));
+            localStorage.setItem("coordinates", JSON.stringify({ lat, lon, country: selectedValue }));
+          } else {
+            alert('Location not found');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching coordinates:', error);
+          alert('Error fetching coordinates');
+        });
     }
-
-    return () => {
-      // Cleanup function to cancel the request when the component unmounts
-      if (cancelAxios) {
-        cancelAxios();
-      }
-    };
-  }, []);
+  }, [selectedValue, dispatch]);
 
   useEffect(() => {
-    localStorage.setItem('lastSelectedCountry', selectedValue); // Save the last selected country to local storage
+    localStorage.setItem('lastSelectedCountry', selectedValue);
   }, [selectedValue]);
 
   const handleChange = (event) => {
-    setSelectedValue(event.target.value);
+    const newValue = event.target.value;
+    setSelectedValue(newValue);
     if (cancelAxios) {
       cancelAxios();
     }
-  
+
     axios.get('https://api.opencagedata.com/geocode/v1/json', {
       params: {
-        q: event.target.value,
+        q: newValue,
         key: 'cf07c0a198774c8da2d00f308cf79dfb' // Replace 'YOUR_API_KEY' with your actual API key
       },
       cancelToken: new axios.CancelToken((c) => {
@@ -95,23 +108,18 @@ function App() {
     })
     .then(response => {
       const results = response.data.results;
-      console.log(results);
       if (results.length > 0) {
         const lat = results[0].geometry.lat;
         const lon = results[0].geometry.lng;
-        fetchWeatherData(lat, lon);
-        localStorage.setItem("coordinates", JSON.stringify({ lat, lon, country: event.target.value }));
+        dispatch(fetchWeather({ lat, lon }));
+        localStorage.setItem("coordinates", JSON.stringify({ lat, lon, country: newValue }));
       } else {
         alert('Location not found');
       }
     })
     .catch(error => {
-      if (axios.isCancel(error)) {
-        console.log('Request canceled:', error.message);
-      } else {
-        console.error('Error fetching data:', error);
-        alert('Error fetching data');
-      }
+      console.error('Error fetching coordinates:', error);
+      alert('Error fetching coordinates');
     });
   };
 
@@ -125,32 +133,7 @@ function App() {
       i18n.changeLanguage("en")
       moment.locale("en");
     }
-    moment().format("MMMM Do YYYY, h:mm:ss a");
   }
-
-  const fetchWeatherData = (lat, lon) => {
-    axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=affeeb15585829dda0d9dc5ad82a7ce6`)
-      .then(response => {
-        const responseTemp = Math.round(response.data.main.temp - 272.15);
-        const min = Math.round(response.data.main.temp_min - 272.15);
-        const max = Math.round(response.data.main.temp_max - 272.15);
-        const description = response.data.weather[0].description;
-        const responseIcon = response.data.weather[0].icon;
-  
-        setTemp({
-          number: responseTemp,
-          description: description,
-          min: min,
-          max: max,
-          icon: `https://openweathermap.org/img/wn/${responseIcon}@2x.png`,
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error);
-        alert('Error fetching data');
-      });
-  };
-  
 
   const day = moment().format('dddd, Do MMMM')
 
@@ -158,7 +141,6 @@ function App() {
     <div className="App">
       <ThemeProvider theme={theme}>
         <Container maxWidth="sm">
-
           <div className='content'>
             <div className='card'>
               <div className='top'>
@@ -169,13 +151,15 @@ function App() {
                   <FontAwesomeIcon icon={faDroplet} className='drop drop2'/>
                   <FontAwesomeIcon icon={faDroplet} className='drop drop3'/>
                 </div>
-
                 <div className='time'>
-                  <h1>{temp.number < 10 && temp.number > 0 ? `0${temp.number}`: temp.number} <img src={temp.icon} /></h1>
+                  {isLoading ? 
+                    <CircularProgress style={{color: "white", marginTop: "50px"}}/> 
+                    :
+                    <h1>{temp.number < 10 && temp.number > 0 ? `0${temp.number}`: temp.number} <img src={temp.icon} /></h1>
+                  }
                   <h2 style={{ minWidth: language === "ar" ? '240px' : 'auto'}}>{t("min")}: {temp.min} | {t("max")}: {temp.max}</h2>
                 </div>
               </div>
-
               <div className='bottom' dir={direction}>
                 <div className='info'>
                   <h1>{t(temp.description)}</h1>
@@ -183,15 +167,13 @@ function App() {
                 </div>
                 <FormControl className='select' style={{ width: selectedValue.length > 6  && language === "en" ? '290px' : 'fit-content' }}>
                   <InputLabel id="select-label" style={{ right: language === "en" ? 'auto' : 0, left: language === "en" ? 0 : 'auto' }}>{t("Select a Location")}</InputLabel>
-                    <Select  
+                  <Select  
                     sx={{
                       color: "white",
                       '.MuiOutlinedInput-notchedOutline': {
                         borderColor: 'transparent !important',
                       },
-                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-
-                      },
+                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': {},
                       '&.MuiSelect-outlined': {
                         borderTop: '0px !important',
                       },
